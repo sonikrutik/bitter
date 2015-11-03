@@ -1,0 +1,56 @@
+$font-stack: San Francisco, Helvetica Neue, Apple Color Emoji, sans-serif;
+$primary-color: #333;
+
+body {
+    max-width: 30em;
+    margin: auto;
+    font: 100% $font-stack;
+    color: $primary-color;
+}
+
+* {
+    box-sizing: border-box;
+}
+*:after, *:before {
+    box-sizing: inherit;
+}
+
+header {
+    text-align: center;
+}
+
+#composer > form {
+    width: 100%;
+    display: block;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    font-size: larger;
+    padding: 10px;
+    margin-bottom: 0.75em;
+}
+
+button, .counter {
+    font-size: large;
+}
+
+.counter {
+    display: inline-block;
+    float: right;
+    font-weight: bold;
+    transition: color 400ms;
+}
+
+.counter-warning {
+    color: #D91;
+}
+
+.counter-invalid {
+    color: #D00;
+}
+
+button[disabled] {
+    cursor: not-allowed;
+}
