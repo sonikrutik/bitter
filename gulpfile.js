@@ -15,7 +15,6 @@ function Workflow() {
   this.input.script = 'index.jsx';
   this.output.script = 'app.js';
   this.watch.style = this.input.directory + '/' + this.input.style.replace(/.+?\.(.+)$/, '**/*.$1');
-  this.watch.update = 'src/**/*.jsx';
 }
 
 // ============================================================
@@ -123,23 +122,23 @@ var bundler = browserify({
 
 function bundle() {
   var pipe = bundler.bundle()
-  .on('error', Console.error)
-  .pipe(source(workflow.output.script))
-  .pipe(buffer());
+    .on('error', Console.error)
+    .pipe(source(workflow.output.script))
+    .pipe(buffer());
 
   if (production) {
-
-    pipe.pipe(uglify())
-    .on('error', Console.error);
-
+    pipe
+      .pipe(uglify())
+      .on('error', Console.error);
   } else {
-
-    pipe.pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(sourcemaps.write());
+    pipe
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write());
   }
+
   return pipe
-  .pipe(gulp.dest(workflow.output.directory))
-  .pipe(livereload());
+    .pipe(gulp.dest(workflow.output.directory))
+    .pipe(livereload());
 }
 
 function watchBundle() {
@@ -160,22 +159,22 @@ gulp.task('watchScript', watchBundle);
 
 var sassOptions = {
   style:     (production) ? 'compressed' : 'expanded',
-  sourcemap: !production,
-  require:   'sass-globbing'
+  sourcemap: !production
 }
 
 gulp.task('style', function () {
   var pipe = sass(workflow.input.directory + '/' + workflow.input.style, sassOptions)
-  .on('error', Console.error)
-  .pipe(autoprefixer({map: {inline: true}}));
+    .on('error', Console.error)
+    .pipe(autoprefixer({map: {inline: true}}));
 
   if (!production) {
     pipe.pipe(sourcemaps.write());
   }
 
-  pipe.pipe(rename(workflow.output.style))
-  .pipe(gulp.dest(workflow.output.directory))
-  .pipe(livereload())
+  pipe
+    .pipe(rename(workflow.output.style))
+    .pipe(gulp.dest(workflow.output.directory))
+    .pipe(livereload())
 });
 
 // ------------------------------------------------------------
@@ -188,15 +187,11 @@ gulp.task('watch', ['style', 'watchScript'], function () {
   var watches = workflow.watch;
 
   for (var task in watches) {
-
     var glob = watches[task];
 
     if (task == 'update') {
-
       gulp.watch(glob, livereload.changed);
-
     } else {
-
       gulp.watch(glob, [task]);
     }
   }
