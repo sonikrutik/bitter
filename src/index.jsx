@@ -24,11 +24,13 @@ class Composer extends React.Component {
   }
 
   render() {
+    const disabled = this.messageLength > MAX_MESSAGE_LENGTH;
+    // Conveniently ignore the ES7 proposed syntax ::this.handleChange...
     return (
       <form method="POST" action="#">
         <textarea value={this.state.message}
-                  onChange={this.handleChange.bind(this)} />
-        <button disabled={this.messageLength > MAX_MESSAGE_LENGTH}> Post </button>
+                  onChange={::this.handleChange} />
+        <button disabled={disabled}> Post </button>
         <MessageCounter messageLength={this.messageLength} />
       </form>
     );
