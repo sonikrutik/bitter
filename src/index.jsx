@@ -1,6 +1,9 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const MAX_MESSAGE_LENGTH = 140;
+
+
 class Composer extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +17,7 @@ class Composer extends React.Component {
     return this.state.message.length;
   }
 
-  onChangeMessage(event) {
+  handleChange(event) {
     this.setState({
       message: event.target.value
     });
@@ -24,8 +27,8 @@ class Composer extends React.Component {
     return (
       <form method="POST" action="#">
         <textarea value={this.state.message}
-                  onChange={this.onChangeMessage.bind(this)} />
-        <button disabled={this.messageLength < 0}> Post </button>
+                  onChange={this.handleChange.bind(this)} />
+        <button disabled={this.messageLength > MAX_MESSAGE_LENGTH}> Post </button>
         <MessageCounter messageLength={this.messageLength} />
       </form>
     );
@@ -34,14 +37,14 @@ class Composer extends React.Component {
 
 class MessageCounter extends React.Component {
   get remaining() {
-    return 140 - this.props.messageLength;
+    return MAX_MESSAGE_LENGTH - this.props.messageLength;
   }
 
   get classNames() {
-    if (this.remaining < 30) {
-      return 'counter counter-warning';
-    } else if (this.remaining <= 0) {
+    if (this.remaining <= 0) {
       return 'counter counter-invalid';
+    } else if (this.remaining < 30) {
+      return 'counter counter-warning';
     } else {
       return 'counter';
     }
