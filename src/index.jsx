@@ -1,8 +1,7 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const MAX_MESSAGE_LENGTH = 140;
-
 
 class Composer extends React.Component {
   constructor(props) {
