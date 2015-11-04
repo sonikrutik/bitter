@@ -117,8 +117,7 @@ var bundler = browserify({
   packageCache: {}
 })
   .transform('babelify', {
-    presets: ['es2015', 'react'],
-    plugins: ['transform-function-bind']
+    presets: ['es2015', 'react']
   });
 
 function bundle() {
