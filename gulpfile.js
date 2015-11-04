@@ -159,7 +159,10 @@ gulp.task('watchScript', watchBundle);
 
 var sassOptions = {
   style:     (production) ? 'compressed' : 'expanded',
-  sourcemap: !production
+  sourcemap: !production,
+  loadPath: [
+    './node_modules/bootstrap-sass/assets/stylesheets/'
+  ]
 }
 
 gulp.task('style', function () {

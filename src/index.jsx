@@ -38,17 +38,26 @@ class Composer extends React.Component {
     return this.props.message.length;
   }
 
+  get empty() {
+    return this.props.message.length === 0;
+  }
+
+  get tooLong() {
+    return this.messageLength > MAX_MESSAGE_LENGTH;
+  }
+
   get submitDisabled() {
-    return this.props.message.length === 0 ||
-      this.messageLength > MAX_MESSAGE_LENGTH;
+    return this.empty || this.tooLong;
   }
 
   render() {
     return (
       <form method="POST" action="#" onSubmit={postMessage}>
-        <textarea value={this.props.message}
-                  onChange={evt => changeMessage(evt.target.value)} />
-        <button type="submit" disabled={this.submitDisabled}> Post </button>
+        <MesssageTextArea
+          value={this.props.message}
+          valid={!this.tooLong}
+          onChange={evt => changeMessage(evt.target.value)} />
+        <SubmitButton disabled={this.submitDisabled}> Post </SubmitButton>
         <MessageCounter messageLength={this.messageLength} />
       </form>
     );
@@ -63,7 +72,7 @@ class MessageCounter extends React.Component {
   get classNames() {
     if (this.remaining <= 0) {
       return 'counter counter-invalid';
-    } else if (this.remaining < 30) {
+    } else if (this.remaining <= 30) {
       return 'counter counter-warning';
     } else {
       return 'counter';
@@ -77,4 +86,22 @@ class MessageCounter extends React.Component {
   }
 }
 
+/* Bootstrap-ified components. */
+
+const SubmitButton = ({children, disabled}) => (
+  <button disabled={disabled} className="btn btn-primary" type="submit">
+    {children}
+  </button>
+);
+
+const MesssageTextArea = (props) => {
+  const className = "form-group" + (props.valid ? '' : ' has-error');
+  return (
+    <div className={className}>
+      <textarea className='form-control' rows={3} {...props} />
+    </div>
+  );
+};
+
+/* Register events. */
 document.addEventListener("DOMContentLoaded", rerender);
