@@ -1,33 +1,9 @@
+/*eslint no-use-before-define: [2, "nofunc"]*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 const MAX_MESSAGE_LENGTH = 140;
-
-/* Weird global stuff; pretend it doesn't exist. */
-
-let currentMessage = '';
-const messages = [];
-
-function rerender() {
-  const container = document.getElementById('composer');
-  ReactDOM.render(
-    <Composer message={currentMessage} />,
-    container
-  );
-}
-
-function changeMessage(text) {
-  currentMessage = text;
-  rerender();
-}
-
-function postMessage(event) {
-  event.preventDefault();
-
-  messages.push(currentMessage);
-  currentMessage = '';
-  rerender();
-}
 
 /*******************************************************************************
  * My beautiful app:
@@ -103,5 +79,31 @@ const MesssageTextArea = (props) => {
   );
 };
 
-/* Register events. */
+/* Weird global stuff; pretend it doesn't exist. */
+
+let currentMessage = '';
+const messages = [];
+
+function changeMessage(text) {
+  currentMessage = text;
+  rerender();
+}
+
+function postMessage(event) {
+  event.preventDefault();
+
+  messages.push(currentMessage);
+  currentMessage = '';
+  rerender();
+}
+
+function rerender() {
+  const container = document.getElementById('composer');
+  ReactDOM.render(
+    <Composer message={currentMessage} />,
+    container
+  );
+}
+
+/* Register initial render. */
 document.addEventListener("DOMContentLoaded", rerender);
