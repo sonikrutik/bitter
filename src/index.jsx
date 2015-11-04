@@ -3,33 +3,52 @@ import ReactDOM from 'react-dom';
 
 const MAX_MESSAGE_LENGTH = 140;
 
+/* Weird global stuff; pretend it doesn't exist. */
+
+let currentMessage = '';
+const messages = [];
+
+function rerender() {
+  const container = document.getElementById('composer');
+  ReactDOM.render(
+    <Composer message={currentMessage} />,
+    container
+  );
+}
+
+function changeMessage(text) {
+  currentMessage = text;
+  rerender();
+}
+
+function postMessage(event) {
+  event.preventDefault();
+
+  messages.push(currentMessage);
+  currentMessage = '';
+  rerender();
+}
+
+/*******************************************************************************
+ * My beautiful app:
+ ******************************************************************************/
+
 class Composer extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      message: ''
-    };
-  }
-
   get messageLength() {
-    return this.state.message.length;
+    return this.props.message.length;
   }
 
-  handleChange(event) {
-    this.setState({
-      message: event.target.value
-    });
+  get submitDisabled() {
+    return this.props.message.length === 0 ||
+      this.messageLength > MAX_MESSAGE_LENGTH;
   }
 
   render() {
-    const disabled = this.messageLength > MAX_MESSAGE_LENGTH;
-    // Conveniently ignore the ES7 proposed syntax ::this.handleChange...
     return (
-      <form method="POST" action="#">
-        <textarea value={this.state.message}
-                  onChange={::this.handleChange} />
-        <button disabled={disabled}> Post </button>
+      <form method="POST" action="#" onSubmit={postMessage}>
+        <textarea value={this.props.message}
+                  onChange={evt => changeMessage(evt.target.value)} />
+        <button type="submit" disabled={this.submitDisabled}> Post </button>
         <MessageCounter messageLength={this.messageLength} />
       </form>
     );
@@ -58,10 +77,4 @@ class MessageCounter extends React.Component {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById('composer');
-  ReactDOM.render(
-    <Composer />,
-    container
-  );
-});
+document.addEventListener("DOMContentLoaded", rerender);
