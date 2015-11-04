@@ -98,7 +98,7 @@ const MesssageTextArea = (props) => {
   const className = "form-group" + (props.valid ? '' : ' has-error');
   return (
     <div className={className}>
-      <textarea className='form-control' rows={3} {...props} />
+      <textarea className='form-control input-lg' rows={3} {...props} />
     </div>
   );
 };
