@@ -1,7 +1,15 @@
+@charset "UTF-8";
 @import "bootstrap";
 
 .container {
     max-width: 32em;
+}
+
+.logo {
+    height: 90px;
+    color: transparent;
+    background: no-repeat center/contain url("./bitter-logo.png") transparent;
+    background-clip: padding-box;
 }
 
 /* Composer styles */
