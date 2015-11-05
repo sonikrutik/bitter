@@ -1,3 +1,4 @@
+/*eslint-env es6*/
 /*eslint no-use-before-define: [2, "nofunc"]*/
 
 import React from 'react';
@@ -9,13 +10,9 @@ const MAX_MESSAGE_LENGTH = 140;
  * My beautiful app:
  ******************************************************************************/
 
-class Composer extends React.Component {
-  get messageLength() {
-    return this.props.message.length;
-  }
-
+class MessageComposer extends React.Component {
   get empty() {
-    return this.props.message.length === 0;
+    return this.props.message.trim() === '';
   }
 
   get tooLong() {
@@ -26,10 +23,14 @@ class Composer extends React.Component {
     return this.empty || this.tooLong;
   }
 
+  get messageLength() {
+    return this.props.message.length;
+  }
+
   render() {
     return (
       <form method="POST" action="#" onSubmit={postMessage}>
-        <MesssageTextArea
+        <ComposeTextArea
           value={this.props.message}
           valid={!this.tooLong}
           onChange={evt => changeMessage(evt.target.value)} />
@@ -45,7 +46,7 @@ class MessageCounter extends React.Component {
     return MAX_MESSAGE_LENGTH - this.props.messageLength;
   }
 
-  get classNames() {
+  get className() {
     if (this.remaining <= 0) {
       return 'counter counter-invalid';
     } else if (this.remaining <= 30) {
@@ -57,7 +58,7 @@ class MessageCounter extends React.Component {
 
   render() {
     return (
-      <span className={this.classNames}>{this.remaining}</span>
+      <span className={this.className}>{this.remaining}</span>
     );
   }
 }
@@ -70,7 +71,7 @@ const SubmitButton = ({children, disabled}) => (
   </button>
 );
 
-const MesssageTextArea = (props) => {
+const ComposeTextArea = (props) => {
   const className = "form-group" + (props.valid ? '' : ' has-error');
   return (
     <div className={className}>
@@ -79,10 +80,38 @@ const MesssageTextArea = (props) => {
   );
 };
 
+const MessageList = ({messages}) => (
+  <section className="message-list panel panel-default">
+    <div className="panel-body">
+      {messages.map((props, i) => <Message key={i} {...props} />)}
+    </div>
+  </section>
+);
+
+const Message = ({text, name, avatarURL}) => (
+  <div className="media">
+    <div className="media-left">
+      <a href="#">
+        <img className="media-object message-avatar" src={avatarURL} />
+      </a>
+    </div>
+    <div className="media-body">
+      <h4 className="media-heading">{name}</h4>
+      <p>{text}</p>
+    </div>
+  </div>
+);
+
 /* Weird global stuff; pretend it doesn't exist. */
 
 let currentMessage = '';
-const messages = [];
+const messages = [
+  {
+    text: 'whats a monad lol',
+    name: 'Eddie Antonio Santos',
+    avatarURL: 'https://pbs.twimg.com/profile_images/591750801590091776/NdtsEAu7.jpg'
+  }
+];
 
 function changeMessage(text) {
   currentMessage = text;
@@ -92,7 +121,11 @@ function changeMessage(text) {
 function postMessage(event) {
   event.preventDefault();
 
-  messages.push(currentMessage);
+  messages.push({
+    text: currentMessage,
+    name: 'Eddie Antonio Santos',
+    avatarURL: 'https://pbs.twimg.com/profile_images/591750801590091776/NdtsEAu7.jpg'
+  });
   currentMessage = '';
   rerender();
 }
@@ -100,7 +133,10 @@ function postMessage(event) {
 function rerender() {
   const container = document.getElementById('composer');
   ReactDOM.render(
-    <Composer message={currentMessage} />,
+    <div>
+      <MessageComposer message={currentMessage} />
+      <MessageList messages={messages} />
+    </div>,
     container
   );
 }

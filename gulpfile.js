@@ -1,4 +1,5 @@
 /*eslint key-spacing: false */
+// Derived from: https://gist.github.com/emilniklas/39c076d97648f1666a84
 
 // ============================================================
 //   $ npm install --save-dev gulp-util node-notifier gulp vinyl-source-stream vinyl-buffer gulp-uglify gulp-sourcemaps gulp-livereload browserify watchify babelify gulp-ruby-sass gulp-autoprefixer gulp-rename
@@ -121,22 +122,22 @@ var bundler = browserify({
   });
 
 function bundle() {
-  var pipe = bundler.bundle()
+  var stream = bundler.bundle()
     .on('error', Console.error)
     .pipe(source(workflow.output.script))
     .pipe(buffer());
 
   if (production) {
-    pipe
+    stream
       .pipe(uglify())
       .on('error', Console.error);
   } else {
-    pipe
+    stream
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sourcemaps.write());
   }
 
-  return pipe
+  return stream
     .pipe(gulp.dest(workflow.output.directory))
     .pipe(livereload());
 }
