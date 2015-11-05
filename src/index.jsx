@@ -6,8 +6,8 @@ import ReactDOM from 'react-dom';
 
 const MAX_MESSAGE_LENGTH = 140;
 
-/*******************************************************************************
- * My beautiful app:
+/******************************************************************************
+ * My beautiful app:                                                          *
  ******************************************************************************/
 
 class MessageComposer extends React.Component {
@@ -105,13 +105,7 @@ const Message = ({text, name, avatarURL}) => (
 /* Weird global stuff; pretend it doesn't exist. */
 
 let currentMessage = '';
-const messages = [
-  {
-    text: 'whats a monad lol',
-    name: 'Eddie Antonio Santos',
-    avatarURL: 'https://pbs.twimg.com/profile_images/591750801590091776/NdtsEAu7.jpg'
-  }
-];
+const messages = [];
 
 function changeMessage(text) {
   currentMessage = text;
@@ -127,6 +121,7 @@ function postMessage(event) {
     avatarURL: 'https://pbs.twimg.com/profile_images/591750801590091776/NdtsEAu7.jpg'
   });
   currentMessage = '';
+
   rerender();
 }
 
@@ -135,7 +130,7 @@ function rerender() {
   ReactDOM.render(
     <div>
       <MessageComposer message={currentMessage} />
-      <MessageList messages={messages} />
+      <MessageList messages={Array.from(messages).reverse()} />
     </div>,
     container
   );
