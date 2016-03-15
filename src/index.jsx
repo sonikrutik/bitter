@@ -24,7 +24,8 @@ class MessageComposer extends React.Component {
   }
 
   get messageLength() {
-    return MAX_MESSAGE_LENGTH;
+    /* TODO: something with this.props.message */
+    return 0;
   }
 
   render() {
@@ -105,7 +106,8 @@ const Message = ({text, name, avatarURL}) => (
 /* Weird global stuff; pretend it doesn't exist. */
 
 let currentMessage = '';
-const messages = [];
+const messages = loadMessagesFromLocalStorage() || [];
+
 
 function changeMessage(text) {
   currentMessage = text;
@@ -122,7 +124,17 @@ function postMessage(event) {
   });
   currentMessage = '';
 
+  window.sessionStorage.setItem('bitter:messages', JSON.stringify(messages));
+
   rerender();
+}
+
+function loadMessagesFromLocalStorage() {
+  const data = window.sessionStorage.getItem('bitter:messages');
+  if (!data) {
+    return undefined;
+  }
+  return JSON.parse(data);
 }
 
 function rerender() {
