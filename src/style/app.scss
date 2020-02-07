@@ -1,6 +1,10 @@
 @charset "UTF-8";
 @import "bootstrap";
 
+header.page-header {
+    margin-top: 1rem;
+}
+
 .container {
     max-width: 32em;
 }
@@ -43,4 +47,9 @@ button[disabled] {
 
 .message-list {
     margin: 20px 0;
+}
+
+/********************************** Media ***********************************/
+.media-left {
+    margin-right: 1rem;
 }
