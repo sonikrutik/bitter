@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "A bitter social network",
   "scripts": {
-    "dev": "parcel public/index.html",
+    "start": "parcel public/index.html",
     "build": "parcel build public/index.html"
   },
   "author": "",
